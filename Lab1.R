@@ -1,4 +1,4 @@
-# 1. Установить рабочую дирректорию, загрузить файл с данными
+# 1. Установить рабочую директорию, загрузить файл с данными
 setwd("C:/Users/filon/DataspellProjects/Lab1")
 Sys.setlocale("LC_ALL", "Russian_Russia.1251")
 data <- read.table('variant1.csv', header = TRUE, sep = ';', encoding = "windows-1251")
@@ -40,63 +40,43 @@ data2 <- subset(data, data$experience >= 3.5)
 View(data2)
 
 
-#TODO/-------------------------------------------------------------------------------------------------------------/
-mystats <- function(x) {
-  if (is.numeric(x)) {
-    m <- mean(x)
-    n <- length(x)
-    s <- sd(x)
-    skew <- sum((x - m)^3 / s^3) / n
-    kurt <- sum((x - m)^4 / s^4) / n - 3
-    return(c(n = n, mean = m, stdev = s, skew = skew, kurtosis = kurt))
-  }
-}
-
-# 3. Расчитатаь основные статические хпрактеристики
+#TODO/-------------------------------------------------------------------------------------------------------------
+# 3. Рассчитатаь основные статические характеристики
 library('psych')
 # Для общей выборки
 data <- na.omit(data)
-sm <- describe(data)
+sm <- describe(data[c(3, 4, 5, 6, 7)])
 View(sm[c(2, 3, 4, 5, 7, 8, 9, 10, 11, 12)])
-summary(data)
-mystats(data)
 #/---------------------------------------------/
 # Для подвыборки со стажем < 3.5
 data1 <- na.omit(data1)
-sm1 <- describe(data1)
+sm1 <- describe(data1[c(3, 4, 5, 6, 7)])
 View(sm1[c(2, 3, 4, 5, 7, 8, 9, 10, 11, 12)])
-summary(data1)
-mystats(data$group)
 #/---------------------------------------------/
 # Для подвыборки со стажем >= 3.5
 data2 <- na.omit(data2)
-sm2 <- describe(data2)
+sm2 <- describe(data2[c(3, 4, 5, 6, 7)])
 View(sm2[c(2, 3, 4, 5, 7, 8, 9, 10, 11, 12)])
-summary(data2)
 
 
 #TODO/-------------------------------------------------------------------------------------------------------------/
 # 4. Графический анализ
-# Диаграмма рассяния для data
+# Диаграмма рассеяния для data
 par(mfrow = c(1, 1))
 attach(data)
 plot(data.frame(data$age, data$score), xlab = 'age', ylab = 'score', col = 'blue', pch = 16)
 abline(lm(data$score ~ data$age), col = 'red', lwd = 2)
 title(main = 'scatter diagramm for data')
-dev.off()
 # Диаграмма рассеяния для data1
 attach(data1)
 plot(data.frame(data1$age, data1$score), xlab = 'age', ylab = 'score', col = 'green', pch = 16)
 abline(lm(data1$score ~ data1$age), col = 'red', lwd = 2)
 title(main = 'scatter diagramm for data1')
-dev.off()
 # Диаграмма рассеяния для data2
-png('diagramm1.png')
 attach(data2)
 plot(data2$age, data2$score, xlab = 'age', ylab = 'score', col = 'purple', pch = 16)
 abline(lm(data2$score ~ data2$age), col = 'red', lwd = 2)
 title(main = 'scatter diagramm for data2')
-dev.off()
 
 
 #TODO/-------------------------------------------------------------------------------------------------------------/
@@ -120,7 +100,6 @@ legend('topright', c('1', '2', '3', '4'), cex = 0.8, fill = c('green', 'yellow',
 
 #TODO/-------------------------------------------------------------------------------------------------------------/
 # Категориальная радиальная диаграмма для data
-png('diagramm1.png')
 data_11 <- data[data$group == 1 & data$gender == 1,]
 data_12 <- data[data$group == 1 & data$gender == 2,]
 data_21 <- data[data$group == 2 & data$gender == 1,]
@@ -149,7 +128,6 @@ legend('topright', c('low', 'average', 'high'), cex = 0.5, fill = c('green', 'pu
 dev.off()
 # /-------------------------------------------------------------------------------------------------/
 # Категориальная радиальная диаграмма для data1
-png("diagramm1.png")
 data1_11 <- data1[data1$group == 1 & data1$gender == 1,]
 data1_12 <- data1[data1$group == 1 & data1$gender == 2,]
 data1_21 <- data1[data1$group == 2 & data1$gender == 1,]
@@ -172,7 +150,6 @@ legend('topright', c('low', 'average', 'high'), cex = 0.5, fill = c('green', 'pu
 dev.off()
 # /-------------------------------------------------------------------------------------------------/
 # Категориальная радиальная диаграмма для data2
-png("diagramm1.png")
 data2_11 <- data2[data2$group == 1 & data2$gender == 1,]
 data2_12 <- data2[data2$group == 1 & data2$gender == 2,]
 data2_21 <- data2[data2$group == 2 & data2$gender == 1,]
@@ -195,7 +172,8 @@ legend('topright', c('low', 'average', 'high'), cex = 0.8, fill = c('green', 'pu
 pie(x2_3, pieper2_3, main = "Radial chart", radius = 1,
     xlab = "gender - 2", ylab = "group - 2", col = c('green', 'purple', 'cyan'), clockwise = TRUE)
 legend('topright', c('low', 'average', 'high'), cex = 0.8, fill = c('green', 'purple', 'cyan'))
-dev.off()
+
+
 #TODO/-------------------------------------------------------------------------------------------------------------/
 # Категориальная столбиковая диаграмма для data
 par(mfrow = c(1, 2))
@@ -214,6 +192,7 @@ barplot(table(data2$age[data2$group == 2]), col = 'green', main = '2', ylim = c(
 
 #TODO/-------------------------------------------------------------------------------------------------------------/
 # Диаграмма размаха для data
+par(mfrow = c(1, 1))
 boxplot(data$age ~ data$gender, main = 'boxplot for data', col = 'green', xlab = 'gender', ylab = 'age')
 # Диаграмма размаха для data1
 boxplot(data1$age ~ data1$gender, main = 'boxplot for data1', col = 'green', xlab = 'gender', ylab = 'age')
@@ -262,46 +241,50 @@ lines(density(data2$score), col = 'blue', lty = 2, lwd = 2)
 
 #TODO/-------------------------------------------------------------------------------------------------------------/
 # Матрица диаграмм для data
+par(mfrow = c(1, 1))
 pairs(~data$age +
   data$experience +
   data$in_time +
   data$mistakes +
-  data$score, pch = 16, upper.panel = NULL, labels = c('Age', 'Experience', 'In time', 'Mistakes', 'Score'), col = 'cyan')
+  data$score, pch = 16, upper.panel = NULL,
+  labels = c('Age', 'Experience', 'In time', 'Mistakes', 'Score'), col = 'cyan')
 # Матрица диаграмм для data1
 pairs(~data1$age +
   data1$experience +
   data1$in_time +
   data1$mistakes +
-  data1$score, pch = 16, upper.panel = NULL, labels = c('Age', 'Experience', 'In time', 'Mistakes', 'Score'), col = 'light green')
+  data1$score, pch = 16, upper.panel = NULL,
+  labels = c('Age', 'Experience', 'In time', 'Mistakes', 'Score'), col = 'light green')
 # Матрица диаграмм для data2
 pairs(~data2$age +
   data2$experience +
   data2$in_time +
   data2$mistakes +
-  data2$score, pch = 16, upper.panel = NULL, labels = c('Age', 'Experience', 'In time', 'Mistakes', 'Score'), col = 'light blue')
+  data2$score, pch = 16, upper.panel = NULL,
+  labels = c('Age', 'Experience', 'In time', 'Mistakes', 'Score'), col = 'light blue')
 
 
 #TODO/-------------------------------------------------------------------------------------------------------------/
 # 5. Корреляционный анализ данных
-# Корреляционый анализ для data
-# Chi-квадрат 5.1
+# Корреляционный анализ для data
+# Chi-квадрат
 chisq.test(data$qualitative, data$gender)
-# Критерий фишера 5.1
+# Критерий фишера
 fisher.test(table(data$qualitative, data$gender))
-# Расчёт коэфициентов корреляции (таблица м это таблица лишь с числовыми значениями)
-M <- data[, unlist(lapply(data, is.numeric))]
-# Коэфициент корреляции Пирсона 5.2
-N <- cor(M, use = "pairwise.complete.obs")
-N[is.na(N)] <- 0
+# Расчёт Коэффициентов корреляции (таблица м это таблица лишь с числовыми значениями)
+M <- data[, unlist(lapply(data, is.numeric))][c(3, 4, 5, 6, 7, 8)]
+# Коэффициент корреляции Пирсона
+N <- cor(M[c(1, 2, 3, 4)], use = "pairwise.complete.obs")
+View(N)
 rowSums(N)
-# Коэфициент корреляции Спирмана 5.2
+# Коэффициент корреляции Спирмана
 cor(M, use = "pairwise.complete.obs", method = 'spearman')
-# Коэфициент корреляции Кендала 5.2
+# Коэффициент корреляции Кендалла
 cor(M, use = "pairwise.complete.obs", method = 'kendall')
 library('ggm')
-# Кэфициент частной корреляции 5.3
-pcor(c(1, 4, 2, 3, 5, 6, 7, 8), cov(M))
-# Матрицы коэффициентов корреляции 5.4
+# Коэффициент частной корреляции
+pcor(c(1, 2, 3, 4, 5, 6), cov(M))
+# Матрица Коэффициентов корреляции
 library('corrplot')
 col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD",
                           "#4477AA"))
@@ -311,48 +294,51 @@ corrplot(N, method = "color", col = NULL,
          sig.level = 0.01, insig = "blank",
          diag = FALSE)
 #/--------------------------------------------------------/
-# Корреляционый анализ для data1
+# Корреляционный анализ для data1
 # Chi-квадрат
 chisq.test(data1$qualitative, data1$gender)
 # Критерий фишера
 fisher.test(table(data1$qualitative, data1$gender))
-# Расчёт коэфициентов корреляции
-M1 <- data1[, unlist(lapply(data1, is.numeric))]
-# Коэфициент корреляции Пирсона
-N1 <- cor(M1, use = "pairwise.complete.obs")
-N1[is.na(N1)] <- 0
+# Расчёт Коэффициентов корреляции
+M1 <- data1[, unlist(lapply(data1, is.numeric))][c(3, 4, 5, 6, 7, 8)]
+# Коэффициент корреляции Пирсона
+N1 <- cor(M1[c(1, 2, 3, 4)], use = "pairwise.complete.obs")
+N1
 rowSums(N1)
-# Коэфициент корреляции Спирмана
+# Коэффициент корреляции Спирмана
 cor(M1, use = "pairwise.complete.obs", method = 'spearman')
-# Коэфициент корреляции Кендала
+# Коэффициент корреляции Кендалла
 cor(M1, use = "pairwise.complete.obs", method = 'kendall')
 library('ggm')
-# Кэфициент частной корреляции
-pcor(c(4, 8, 2, 3, 5, 6, 7), cov(M1))
+# Коэффициент частной корреляции
+pcor(c(1, 2, 3, 4, 5, 6), cov(M1))
+# Матрицы Коэффициентов корреляции
 corrplot(N1, method = "color", col = COL1(),
          type = "upper", order = "hclust",
          addCoef.col = "black", tl.col = "black", tl.srt = 45,
          sig.level = 0.01, insig = "blank",
          diag = FALSE)
 #/--------------------------------------------------------/
-# Корреляционый анализ для data2
+# Корреляционный анализ для data2
 # Chi-квадрат
 chisq.test(data2$qualitative, data2$gender)
 # Критерий фишера
 fisher.test(table(data2$gender, data2$gender))
-# Расчёт коэфициентов корреляции
-M2 <- data2[, unlist(lapply(data2, is.numeric))]
-# Коэфициент корреляции Пирсона
-N2 <- cor(M2, use = "pairwise.complete.obs")
+# Расчёт Коэффициентов корреляции
+M2 <- data2[, unlist(lapply(data2, is.numeric))][c(3, 4, 5, 6, 7, 8)]
+# Коэффициент корреляции Пирсона
+N2 <- cor(M2[c(1, 2, 3, 4)], use = "pairwise.complete.obs")
+N2
 rowSums(N2)
-# Коэфициент корреляции Спирмана
+# Коэффициент корреляции Спирмана
 cor(M2, use = "pairwise.complete.obs", method = 'spearman')
-# Коэфициент корреляции Кендала
+# Коэффициент корреляции Кендалла
 cor(M2, use = "pairwise.complete.obs", method = 'kendall')
 library('ggm')
-# Кэфициент частной корреляции
-pcor(c(4, 8, 1, 2, 3, 5, 6, 7), cov(M2))
-corrplot(N2, method = "color", col = NULL,
+# Коэффициент частной корреляции
+pcor(c(1, 2, 3, 4, 5, 6), cov(M2))
+# Матрицы Коэффициентов корреляции
+corrplot(N2, method = "color", col = COL1(),
          type = "upper", order = "hclust",
          addCoef.col = "black", tl.col = "black", tl.srt = 45,
          sig.level = 0.01, insig = "blank",
