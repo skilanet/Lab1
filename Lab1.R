@@ -1,4 +1,4 @@
-# 1. Установить рабочую директорию, загрузить файл с данными
+  # 1. Установить рабочую директорию, загрузить файл с данными
 setwd("C:/Users/filon/DataspellProjects/Lab1")
 Sys.setlocale("LC_ALL", "Russian_Russia.1251")
 data <- read.table('variant1.csv', header = TRUE, sep = ';', encoding = "windows-1251")
